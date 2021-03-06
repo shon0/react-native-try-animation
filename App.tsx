@@ -2,7 +2,7 @@ import React from 'react';
 import {
   View,
   SafeAreaView,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   StyleSheet,
   Animated,
   InteractionManager,
@@ -14,7 +14,7 @@ const App = () => {
   const animatedValue = React.useRef(new Animated.Value(0)).current;
   const interPolateSize = animatedValue.interpolate({
     inputRange: [0, 50, 100, 150],
-    outputRange: [32, 44, 36, 32],
+    outputRange: [28, 32, 32, 28],
   });
 
   const startAnimation = () => {
@@ -42,9 +42,13 @@ const App = () => {
         />
       </View>
       <View style={styles.buttonWrapper}>
-        <TouchableOpacity onPress={startAnimation} style={styles.button}>
-          <Animated.Text style={{fontSize: interPolateSize}}>🍌</Animated.Text>
-        </TouchableOpacity>
+        <TouchableWithoutFeedback onPress={startAnimation}>
+          <View style={styles.button}>
+            <Animated.Text style={{fontSize: interPolateSize}}>
+              🍌
+            </Animated.Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     </SafeAreaView>
   );
@@ -60,12 +64,12 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   button: {
-    backgroundColor: '#fffa88',
-    width: 100,
-    height: 100,
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    width: 80,
+    height: 80,
     borderWidth: 1,
     borderColor: 'transparent',
-    borderRadius: 100 / 2,
+    borderRadius: 80 / 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
