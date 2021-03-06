@@ -1,30 +1,49 @@
 import React from 'react';
 import {
-  Text,
   View,
   SafeAreaView,
   TouchableOpacity,
   StyleSheet,
+  Animated,
+  InteractionManager,
 } from 'react-native';
 import LottieView from 'lottie-react-native';
 
 const App = () => {
-  const ref = React.useRef<LottieView>(null);
+  const LottieViewRef = React.useRef<LottieView>(null);
+  const animatedValue = React.useRef(new Animated.Value(0)).current;
+  const interPolateSize = animatedValue.interpolate({
+    inputRange: [0, 50, 100, 150],
+    outputRange: [32, 44, 36, 32],
+  });
+
   const startAnimation = () => {
-    ref.current?.play();
+    Animated.timing(animatedValue, {
+      toValue: 150,
+      useNativeDriver: false,
+    }).start(() =>
+      Animated.timing(animatedValue, {
+        toValue: 0,
+        useNativeDriver: false,
+      }).reset(),
+    );
+
+    InteractionManager.runAfterInteractions(() => {
+      LottieViewRef.current?.play();
+    });
   };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.lottieWrapper}>
         <LottieView
           source={require('./lottie/monkey-see.json')}
-          ref={ref}
+          ref={LottieViewRef}
           loop={false}
         />
       </View>
       <View style={styles.buttonWrapper}>
         <TouchableOpacity onPress={startAnimation} style={styles.button}>
-          <Text style={styles.buttonText}>🍌</Text>
+          <Animated.Text style={{fontSize: interPolateSize}}>🍌</Animated.Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
